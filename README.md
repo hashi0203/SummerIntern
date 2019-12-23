@@ -4,12 +4,16 @@
 
 # 注意
 APIが叩けなくなっているので，APIを叩くフェーズはスルーで画面遷移や入力だけ可能
+<br>
 login.html から開始
+```
 login.html
     ┣━━(ログインできる時)━━ middle.html 
     ┗ firstData.html ━ mode.html ┛   ┣ input.html
                                     　　┗ data.html
+```
 input.html, data.html, advice.html, setting.html は自由に行き来できる
+<br>
 これらのページからログアウトまたは退会を押すと login.html に戻る
 
 # Summer Intern Template Project

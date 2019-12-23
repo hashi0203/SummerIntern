@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 文字エンコードをUTF-8に指定 -->
+        <meta charset="utf-8">
+        <!-- レンダリングを最新に指定 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- 拡大を禁止 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+        <title>アドバイス</title>
+        <link rel="shortcut icon" href="./icon.png">
+        <!-- Semantic UI を読み込む -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+        <!-- Vue.js を読み込む -->
+        <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+
+        <!-- 共通のCSSファイルを読み込む -->
+        <link rel="stylesheet" href="./common/style.css">
+    </head>
+
+    <body>
+        <!-- Vue.jsで読み込む -->
+        <div id="app">
+            <common-menu current="advice"></common-menu>
+            <div class="ui main container" v-if="user.tone==0">
+                <div class="ui centered cards">
+                    <div class="card">
+                        <div class="image">
+                            <img src="https://3.bp.blogspot.com/-_pEwLQP90EY/XNE_U4nPeJI/AAAAAAABSws/QEIfXNVUQPoNTbRJDiJTC4AxmkXJxIsewCLcBGAs/s180-c/pose_heart_hand_idol_woman.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">
+                                📢アドバイス
+                            </div>
+                            <div class="meta">
+                                {{ time.date }}
+                            </div>
+                            <div class="description" v-if="mode.meal=='0'">
+                                ご飯が足りていないようですね…心配なのでもう少し食べてくださいね！
+                            </div>
+                            <div class="description" v-if="mode.meal=='1'">
+                                ちょうどいい量の食事をしていますね！この調子で頑張ってください！
+                            </div>
+                            <div class="description" v-if="mode.meal=='2'">
+                                ご飯の食べすぎです！もう少し我慢してほしいなぁ…
+                            </div>
+                            <div class="description" v-if="mode.exercise=='0'">
+                                運動が足りていないです！通勤時間だけでもいいからもう少し歩いてね！
+                            </div>
+                            <div class="description" v-if="mode.exercise='=1'">
+                                ある程度運動しているようですね！後少しでも多く運動できるように頑張ってください！
+                            </div>
+                            <div class="description" v-if="mode.exercise=='2'">
+                                たくさん運動していますね！この調子で頑張って！！！
+                            </div>
+                            <div class="description">
+                                アドバイスを踏まえて今日も一日頑張りましょう！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui main container" v-if="user.tone==1">
+                <div class="ui centered cards">
+                    <div class="card">
+                        <div class="image">
+                            <img src="http://2.bp.blogspot.com/-ZwYKR5Zu28s/U6Qo2qAjsqI/AAAAAAAAhkM/HkbDZEJwvPs/s180-c/omocha_robot.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">
+                                📢アドバイス
+                            </div>
+                            <div class="meta">
+                                {{ time.date }}
+                            </div>
+                            <div class="description" v-if="mode.meal=='0'">
+                                ご飯が足りていないです。もう少し食べる量を増やしてください。
+                            </div>
+                            <div class="description" v-if="mode.meal=='1'">
+                                ちょうどいい量の食事をしています。この調子です。
+                            </div>
+                            <div class="description" v-if="mode.meal=='2'">
+                                ご飯の食べすぎです。もう少し食べる量を減らしてください。
+                            </div>
+                            <div class="description" v-if="mode.exercise=='0'">
+                                運動が足りていません。もう少し歩く時間を増やしてください。
+                            </div>
+                            <div class="description" v-if="mode.exercise='=1'">
+                                ある程度運動しているようです。もう少し運動を増やすと健康になります。
+                            </div>
+                            <div class="description" v-if="mode.exercise=='2'">
+                                たくさん運動しています。この調子で頑張ってください。
+                            </div>
+                            <div class="description">
+                                アドバイスを踏まえて今日も一日頑張ってください。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui main container" v-if="user.tone==2">
+                <div class="ui centered cards">
+                    <div class="card">
+                        <div class="image">
+                            <img src="https://3.bp.blogspot.com/-AhIiOHOdtmo/V9vCcpFNyRI/AAAAAAAA994/lW1m_jIs_qQRsTNKCjL45sTGLu2PiGHygCLcB/s180-c/keiyakusyo_tsukitsukeru.png">
+                        </div>
+                        <div class="content">
+                            <div class="header">
+                                📢アドバイス
+                            </div>
+                            <div class="meta">
+                                {{ time.date }}
+                            </div>
+                            <div class="description" v-if="mode.meal=='0'">
+                                ご飯が全然足りてません！もっと食べてください！
+                            </div>
+                            <div class="description" v-if="mode.meal=='1'">
+                                食事の量はちょうどいいですね！このリズムを崩さないように！
+                            </div>
+                            <div class="description" v-if="mode.meal=='2'">
+                                ご飯の食べすぎです！このままじゃ取り返しがつきません！
+                            </div>
+                            <div class="description" v-if="mode.exercise=='0'">
+                                運動が足りていません！もっと歩く時間を増やしなさい！
+                            </div>
+                            <div class="description" v-if="mode.exercise='=1'">
+                                少し運動が足りません。もっと運動しないと効果は得られません！
+                            </div>
+                            <div class="description" v-if="mode.exercise=='2'">
+                                たくさん運動していますが、まだまだできるはずです！
+                            </div>
+                            <div class="description">
+                                今日は昨日よりいい生活を送りなさい！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- APIのURLを読み込むJavaScriptファイル -->
+        <script src="./common/config.js" charset="utf-8"></script>
+        <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+        <script src="./js/menu.js" charset="utf-8"></script>
+        <script src="./js/advice.js" charset="utf-8"></script>
+    </body>
+</html>

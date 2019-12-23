@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+　<title>グラフ</title>
+</head>
+<body>
+  <h1>糖尿病に陥る可能性</h1>
+  <canvas id="myLineChart"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+  <script>
+  var ctx = document.getElementById("myLineChart");
+  var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月",],
+      datasets: [
+        {
+          label: '今の生活から予測される糖尿病リスク',
+          data: [33.4,34.5,34.9,35.6,35.9,36.5,37.0,37.2,37.9,38.5,39.9,40.2,],
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)"
+      },
+      {
+        label: '提案される生活から予測されるリスク',
+        data: [33.4,34.5,34.9,35.6,34.2,33.3,32.9,31.9,31.3,31.0,30.6,30.3],
+        borderColor: "rgba(0,0,255,1)",
+        backgroundColor: "rgba(0,0,0,0)"
+      }
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: '糖尿病に陥るリスク（1月1日~12月31日）'
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            suggestedMax: 50,
+            suggestedMin: 0,
+            stepSize: 10,
+            callback: function(value, index, values){
+              return  value +  '%'
+            }
+          }
+        }]
+      },
+    }
+  });
+  </script>
+</body>
+
+</html>

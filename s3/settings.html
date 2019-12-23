@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- 文字エンコードをUTF-8に指定 -->
+        <meta charset="utf-8">
+        <!-- レンダリングを最新に指定 -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <!-- 拡大を禁止 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+        <title>各種設定</title>
+        <link rel="shortcut icon" href="./icon.png">
+        <!-- Semantic UI を読み込む -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+        <!-- Vue.js を読み込む -->
+        <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+
+        <!-- 共通のCSSファイルを読み込む -->
+        <link rel="stylesheet" href="./common/style.css">
+    </head>
+    <body>
+        <!-- Vue.jsで読み込む -->
+        <div id="app">
+            <common-menu current="settings"></common-menu>
+            <h2 class="ui header">
+                <div class="content">
+                    <span class="underline">{{ user.userId }}</span>
+                </div>
+            </h2>
+            <div class="ui main container">
+                <!-- 基本的なコンテンツはここに記載する -->
+                <h1 class="ui header">基本情報</h1>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="user icon"></i>
+                        <input type="text" placeholder="名前" v-model="user.userId" required readonly>
+                    </div>
+                </div><br>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="lock icon"></i>
+                        <input placeholder="パスワード" v-model="user.password" type="password" class="field" name="password">
+                    </div><br>
+                    <div class="ui checkbox">
+                        <input type="checkbox" name="password-check" v-on:click="hide_show(0)">
+                        <label>Show Password</label>
+                    </div>
+                </div><br>
+                <div class="field">
+                    <div class="ui left icon input">
+                        <i class="calendar icon"></i>
+                        <input type="text" placeholder="生年月日(19870302のように記入してください)" v-model="user.birthday">
+                    </div>
+                </div><br>
+                <div class="field">
+                    <button class="ui primary button" type="button" v-on:click="doSave">
+                        更新
+                    </button>
+                </div>
+            </div>
+            <div class="ui main container">
+                <!-- 基本的なコンテンツはここに記載する -->
+                <h1 class="ui header">各種設定</h1>
+                <h3 class="ui header">ヘルスケアとの連携(運動データを自動で取得できます。)</h3>
+
+                <div class="ui buttons">
+                    <button class="ui button" id="healthcare_on" v-on:click="healthcare(0)">許可</button>
+                    <button class="ui button" id="healthcare_off" v-on:click="healthcare(1)">拒否</button>
+                </div>
+
+                <h3 class="ui header">食事入力のリマインド通知</h3>
+
+                <div class="ui buttons">
+                    <button class="ui button" id="meal_on" v-on:click="mealRemind(0)">あり</button>
+                    <button class="ui button" id="meal_off" v-on:click="mealRemind(1)">なし</button>
+                </div>
+
+                <h3 class="ui header">運動入力のリマインド通知</h3>
+                <div class="ui buttons">
+                    <button class="ui button" id="exercise_on" v-on:click="exerciseRemind(0)">あり</button>
+                    <button class="ui button" id="exercise_off" v-on:click="exerciseRemind(1)">なし</button>
+                </div>
+
+                <h3 class="ui header">モード</h3>
+                <div class="ui buttons">
+                    <button class="ui button" id="mode0" v-on:click="modeChange(0)">優しい</button>
+                    <button class="ui button" id="mode1" v-on:click="modeChange(1)">普通</button>
+                    <button class="ui button" id="mode2" v-on:click="modeChange(2)">厳しい</button>
+                </div>
+
+                <h3 class="ui header">
+                    現在の生活習慣病のリスクは{{ expectedRisk }}%です
+                </h3>
+                <h3 class="ui header"> 目標 </h3>
+                <div class="ui left right labeled input">
+                <div class="ui basic label">
+                    リスク
+                </div>
+                <input type="number" v-model="user.goal" placeholder="1" min=0 step="0.5">
+                <div class="ui basic label">
+                    ％
+                </div>
+                </div><br><br>
+                <label>を目標に設定する</label><br><br>
+                <div class="field">
+                    <button class="ui grey button" type="button" v-on:click="showGoal">
+                        目安体脂肪率と体重を見る
+                    </button>
+                </div>
+                <h3 class="ui header" v-if="mode=='show'">
+                    目標達成時の体脂肪率の目安は{{ goalFat }}%、<br>
+                    体重の目安は{{ goalWeight }}kgです。
+                </h3>
+                <h3 class="ui header" v-if="mode=='error'">
+                    目標リスクを入力してください。
+                </h3><br>
+                <div class="field">
+                    <button class="ui primary button" type="button" v-on:click="doSave">
+                        更新
+                    </button>
+                </div>
+            </div>
+            <div class="ui main container">
+                <!-- 基本的なコンテンツはここに記載する -->
+                <h1 class="ui header">健康状態</h1>
+                <div class="field">
+                    健康診断の写真をアップロードすると自動で入力されます<br>
+                    *画像は本サービスにのみ使用します*
+                </div>
+                <div class="ui middle aligned center aligned grid container">
+                    <input @change="selectedFile" type="file" name="file" accept="image/*" class="inputfile" id="embedpollfileinput">
+                    <label for="embedpollfileinput" class="ui huge red right floated button">
+                        <i class="ui upload icon"></i>
+                        Upload image
+                    </label>
+                </div>
+                <div class="ui fitted hidden divider"></div>
+                <div class="ui segment" v-show="pic=='show'">
+                    <img id="preview">
+                </div>
+
+               <div class="ui segment">
+                    <form class="ui large form">
+                        <div class="ui left right labeled input">
+                        <div class="ui basic label">
+                            性別
+                        </div>
+                        <!-- <div class="ui right labeled input"> -->
+                            <select class="ui dropdown" v-model="user.sex">
+                                <option value="0">男</option>
+                                <option value="1">女</option>
+                                <option value="2">その他</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                体重
+                            </div>
+                            <input type="number" v-model="user.weight" placeholder="60.3" min=0 step="0.1">
+                            <div class="ui basic label">
+                                kg
+                            </div>
+                        </div><br><br>
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                身長
+                            </div>
+                            <input type="number" v-model="user.height" placeholder="172.5" min=0 step="0.1">
+                            <div class="ui basic label">
+                                cm
+                            </div>
+                        </div><br><br>
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                体脂肪率
+                            </div>
+                            <input type="number" v-model="user.fat" placeholder="16.5" min=0 step="0.1">
+                            <div class="ui basic label">
+                                %
+                            </div>
+                        </div><br><br>
+                        
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                喫煙
+                            </div>
+                            <select class="ui dropdown" v-model="user.smoke">
+                                <option value="0">無</option>
+                                <option value="1">有</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                飲酒
+                            </div>
+                            <select class="ui dropdown" v-model="user.alcohol">
+                                <option value="0">無</option>
+                                <option value="1">有</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                最大血圧
+                            </div>
+                            <input type="number" v-model="user.maxPressure" placeholder="120.5" min=0 step="0.1">
+                            <div class="ui basic label">
+                                mmHg
+                            </div>
+                        </div><br><br>
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                最小血圧
+                            </div>
+                            <input type="number" v-model="user.minPressure" placeholder="80.5" min=0 step="0.1">
+                            <div class="ui basic label">
+                                mmHg
+                            </div>
+                        </div><br><br>
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                尿検査
+                            </div>
+                            <select class="ui dropdown" v-model="user.urinalysis">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                胸部X線
+                            </div>
+                            <select class="ui dropdown" v-model="user.xray">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                心電図
+                            </div>
+                            <select class="ui dropdown" v-model="user.cardiogram">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                肝機能
+                            </div>
+                            <select class="ui dropdown" v-model="user.liver">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                脂質
+                            </div>
+                            <select class="ui dropdown" v-model="user.lipid">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="ui left right labeled input">
+                            <div class="ui basic label">
+                                血糖
+                            </div>
+                            <select class="ui dropdown" v-model="user.bloodSugar">
+                                <option value="0">正常</option>
+                                <option value="1">異常</option>
+                            </select>
+                        </div><br><br>
+
+                        <div class="field">
+                            <div class="field">
+                                <button class="ui primary button" type="button" v-on:click="doSave">
+                                    更新
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- APIのURLを読み込むJavaScriptファイル -->
+        <script src="./common/config.js" charset="utf-8"></script>
+        <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+        <script src="./js/menu.js" charset="utf-8"></script>
+        <script src="./js/setting.js" charset="utf-8"></script>
+    </body>
+</html>

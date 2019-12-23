@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="utf-8">
+　<title>グラフ</title>
+</head>
+<body>
+  <h1>摂取カロリーグラフ</h1>
+  <canvas id="myLineChart"></canvas>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.js"></script>
+
+  <script>
+  var ctx = document.getElementById("myLineChart");
+  var myLineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['8月1日', '8月2日', '8月3日', '8月4日', '8月5日', '8月6日', '8月7日', '8月8日','8月9日','8月10日','8月11日','8月12日','8月13日','8月14日'
+  ,'8月15日','8月16日','8月17日','8月18日','8月19日','8月20日','8月21日','8月22日','8月23日','8月24日','8月25日','8月26日','8月27日','8月28日','8月29日',
+'8月30日','8月31日',],
+      datasets: [
+        {
+          label: '摂取したカロリー',
+          data: [2600,2629,2610,2521,2489,2238,2790,2123,2213,2891,
+          2821,2901,2900,2721,2612,3329,2531,2782,2492,2521,
+      2621,2621,2912,3431,2291,1700,2572,2912,2621,2562,],
+          borderColor: "rgba(255,0,0,1)",
+          backgroundColor: "rgba(0,0,0,0)"
+        },
+        {
+          label: '理想の摂取カロリー',
+          data: [2400,2400,2400,2400,2400,2400,2400,2400,2400,2400,2400,
+          2400,2400,2400,2400,2400,2400,2400,2400,2400,2400,
+      2400,2400,2400,2400,2400,2400,2400,2400,2400,2400,2400,],
+          borderColor: "rgba(0,0,255,1)",
+          backgroundColor: "rgba(0,0,0,0)"
+        }
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: '摂取カロリー（8月1日~8月31日）'
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            suggestedMax: 5000,
+            suggestedMin: 0,
+            stepSize: 1000,
+            callback: function(value, index, values){
+              return  value +  'kcal'
+            }
+          }
+        }]
+      },
+    }
+  });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 文字エンコードをUTF-8に指定 -->
+    <meta charset="utf-8">
+    <!-- レンダリングを最新に指定 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 拡大を禁止 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>各種設定</title>
+    <link rel="shortcut icon" href="./icon.png">
+    <!-- Semantic UI を読み込む -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <!-- Vue.js を読み込む -->
+    <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+
+    <!-- 共通のCSSファイルを読み込む -->
+    <link rel="stylesheet" href="./common/style.css">
+  </head>
+  <body>
+    <!-- Vue.jsで読み込む -->
+    <div id="app">
+        <div class="ui main container">
+            <!-- 基本的なコンテンツはここに記載する -->
+            <h1 class="ui header">各種設定</h1>
+            <div class="field">
+                後でも変更可能です。ヘルスケアと連携すると運動データが自動で取得できます。
+            </div>
+        </div>
+        <h3 class="ui header">ヘルスケアとの連携</h3>
+
+        <div class="ui buttons">
+            <button class="ui disabled button" id="healthcare_on" v-on:click="healthcare(0)">許可</button>
+            <button class="ui button" id="healthcare_off" v-on:click="healthcare(1)">拒否</button>
+        </div>
+
+        <h3 class="ui header">食事入力のリマインド通知</h3>
+
+        <div class="ui buttons">
+            <button class="ui disabled button" id="meal_on" v-on:click="mealRemind(0)">あり</button>
+            <button class="ui button" id="meal_off" v-on:click="mealRemind(1)">なし</button>
+        </div>
+
+        <h3 class="ui header">運動入力のリマインド通知</h3>
+        <div class="ui buttons">
+            <button class="ui disabled button" id="exercise_on" v-on:click="exerciseRemind(0)">あり</button>
+            <button class="ui button" id="exercise_off" v-on:click="exerciseRemind(1)">なし</button>
+        </div>
+        
+        <h3 class="ui header">モード</h3>
+        <div class="ui buttons">
+            <button class="ui disabled button" id="mode0" v-on:click="modeChange(0)">優しい</button>
+            <button class="ui button" id="mode1" v-on:click="modeChange(1)">普通</button>
+            <button class="ui button" id="mode2" v-on:click="modeChange(2)">厳しい</button>
+        </div>
+
+        <h3 class="ui header">
+            あなたの健康診断結果から算出された<br>
+            生活習慣病のリスクは{{ expectedRisk }}%です<br>
+            この結果から、目標を設定しましょう!!<br>
+        </h3>
+        <div class="field">
+            <button class="ui primary button" type="button" v-on:click="doSave">
+                とりあえず始める
+            </button>
+        </div><br>
+        <div class="field">
+            <button class="ui primary button" type="button" v-on:click="mode='hide'">
+                目標を設定して始める
+            </button>
+        </div><br>
+        <div v-if="mode!=='init'">
+            <h3 class="ui header"> 目標 </h3>
+            <label>リスク</label>
+            <div class="ui right labeled input">
+                <input type="number" onchange="vm.mode = 'hide'" v-model="user.goal" placeholder="172.5" step="0.1">
+                <div class="ui basic label">
+                    %
+                </div>
+            </div>
+            <label>を目標に設定する</label><br><br>
+            <div class="field">
+                <button class="ui grey button" type="button" v-on:click="showGoal">
+                    目安体脂肪率と体重を見る
+                </button>
+            </div>
+            <h3 class="ui header" v-if="mode=='show'">
+                目標達成時の体脂肪率の目安は{{ goalFat }}%、<br>
+                体重の目安は{{ goalWeight }}kgです。
+            </h3>
+            <h3 class="ui header" v-if="mode=='error'">
+                目標リスクを入力してください。
+            </h3><br>
+            <div class="field">
+                <button class="ui primary button" type="button" v-on:click="doSave">
+                    次へ
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- APIのURLを読み込むJavaScriptファイル -->
+    <script src="./common/config.js" charset="utf-8"></script>
+    <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+    <script src="./js/mode.js" charset="utf-8"></script>
+  </body>
+</html>

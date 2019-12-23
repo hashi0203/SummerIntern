@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- 文字エンコードをUTF-8に指定 -->
+    <meta charset="utf-8">
+    <!-- レンダリングを最新に指定 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!-- 拡大を禁止 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+    <title>Users</title>
+
+    <!-- Semantic UI を読み込む -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/semantic-ui/2.2.10/semantic.min.css">
+    <!-- Vue.js を読み込む -->
+    <script src="https://unpkg.com/vue@2.3.3/dist/vue.js"></script>
+
+    <!-- 共通のCSSファイルを読み込む -->
+    <link rel="stylesheet" href="./common/style.css">
+  </head>
+  <body>
+    <!-- Vue.jsで読み込む -->
+    <div id="app">
+        <common-menu current="posts"></common-menu>
+        <div class="ui main container">
+            <!-- 基本的なコンテンツはここに記載する -->
+            <div class="ui segment">
+                <form class="ui form">
+                    <h2 class="ui header">
+                        <div class="content">
+                            <span class="underline">{{ cuid }}</span>
+                        </div>
+                    </h2>
+                    <div class="field">
+                        <textarea rows="10" cols="60" placeholder="ここに記入してください" v-model="post.text"></textarea>
+                    </div>
+                    <div class="field">
+                        <div class="inline fields">
+                            <div class="field">
+                                <label>カテゴリー</label>
+                                <input type="text" v-model="post.category">
+                            </div>
+                            <div class="field">
+                                <button class="ui green button" type="submit" v-on:click="doPost">
+                                    投稿
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="ui segment">
+                <form class="ui form">
+                    <div class="field">
+                        <label>ユーザー名</label>
+                        <input type="text" placeholder="User ID" v-model="query.userId">
+                    </div>
+                    <div class="field">
+                        <label>カテゴリー名</label>
+                        <input type="text" placeholder="Category" v-model="query.category">
+                    </div>
+                    <div class="field">
+                        <label>投稿日時</label>
+                        <div class="inline fields">
+                            <div class="field">
+                                <input type="text" placeholder="年/月/日" v-model="query.start">
+                                <label>から</label>
+                            </div>
+                            <div class="field">
+                                <input type="text" placeholder="年/月/日" v-model="query.end">
+                                <label>まで</label>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="ui green button" v-on:click="toggleMode">
+                        検索
+                    </button>
+                </form>
+            </div>
+            <div class="ui segments" v-if="mode!=='none'">
+                <div class="ui segment" v-for="post in posts">
+                    <h2 class="ui header">
+                        <div class="content">
+                            <span class="underline">{{ post.userId }}</span>
+                        </div>
+                        <button type="button" class="ui right floated grey button" v-on:click="deletePost(post.userId,post.timestamp)" v-if="post.userId==cuid">
+                            削除
+                        </button>
+                        <button type="button" class="ui right floated grey button" v-if="post.userId==cuid">
+                            編集
+                        </button>
+                        <div class="ui fitted hidden divider"></div>
+                            <span class="post_timestamp">{{ post.timestamp }}</span>
+                        <div class="ui fitted hidden divider"></div>
+                            <span class="post_text">{{ post.text }}</span>
+                        <div class="ui fitted hidden divider"></div>
+                        <button class="compact small ui disabled button" v-if="post.category">
+                                <span class="post_category">{{ post.category }}</span>
+                        </button>
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- APIのURLを読み込むJavaScriptファイル -->
+    <script src="./common/config.js" charset="utf-8"></script>
+    <!-- 各ページで使うJavaScriptファイルはこの行より下で読み込む -->
+    <script src="./js/menu.js" charset="utf-8"></script>
+    <script src="./js/posts.js" charset="utf-8"></script>
+
+  </body>
+</html>

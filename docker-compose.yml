@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  nodejs-v10-16:
+    build: 
+      context: ./
+      dockerfile: ./Docker/Dockerfile
+    volumes:
+      - .:/app/
+      - /app/node_modules
+    tty: true
+    environment:
+      TZ: Asia/Tokyo

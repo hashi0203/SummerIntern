@@ -10,7 +10,7 @@ login.html から開始
 login.html
     ┣━━(ログインできる時)━━ middle.html 
     ┗ firstData.html ━ mode.html ┛ ┣ input.html
-                                    　┗ data.html
+                                      ┗ data.html
 ```
 input.html, data.html, advice.html, setting.html は自由に行き来できる
 <br>
